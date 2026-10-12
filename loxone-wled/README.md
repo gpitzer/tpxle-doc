@@ -5,8 +5,8 @@ Funktioniert ohne Zusatzsoftware direkt in Loxone Config.
 
 ## Einrichtung
 
-1. WLED eine **feste IP** geben (Router-Reservierung oder WLED > Config > WiFi Setup), z. B. `192.168.1.50`.
-2. Loxone Config: **Virtueller Ausgang** anlegen, Adresse `http://192.168.1.50`
+1. WLED eine **feste IP** geben (Router-Reservierung oder WLED > Config > WiFi Setup), z. B. `192.168.2.157`.
+2. Loxone Config: **Virtueller Ausgang** anlegen, Adresse `http://192.168.2.157`
    (oder `WLED_VirtualOutput.xml` importieren, IP anpassen).
 3. Option *„Verbindung nach dem Senden schließen"* aktivieren.
 4. Pro Funktion einen **Virtuellen Ausgang Befehl** anlegen (Tabelle unten).
@@ -39,8 +39,17 @@ Alternativ Befehl `/win&A=<v.0>` belassen und den Analogwert direkt mit 0–255 
 
 ## Status zurücklesen (optional)
 
-*Virtueller HTTP-Eingang* mit URL `http://192.168.1.50/win` und Intervall z. B. 10 s.
+*Virtueller HTTP-Eingang* mit URL `http://192.168.2.157/win` und Intervall z. B. 10 s.
 Befehlserkennung für Helligkeit: `<ac>\v</ac>` (0 = aus). Damit lässt sich der Schalter synchron halten, wenn WLED anders bedient wird.
+
+## Zwei RGB-Streifen
+
+Beide Streifen am selben WLED (eine IP):
+- **Gemeinsam steuern** (Standard): alle Befehle oben wirken auf beide Streifen, nichts weiter nötig.
+- **Getrennt steuern**: in WLED unter *Segments* zwei Segmente anlegen (z. B. Segment 0 = Streifen 1, Segment 1 = Streifen 2).
+  Vor den Parametern das Segment wählen, z. B. nur Streifen 2 rot: `/win&SS=1&SV=1&R=255&G=0&B=0`
+  (`SS` = Segment-ID, `SV=1` = Segment auswählen; bitte einmal testen, ich konnte das nicht prüfen).
+- Hängt jeder Streifen an einem **eigenen WLED-Controller**: je einen Virtuellen Ausgang pro IP anlegen.
 
 ## Tipps
 

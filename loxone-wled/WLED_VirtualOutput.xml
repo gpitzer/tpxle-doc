@@ -2,7 +2,7 @@
 <!-- Loxone Config: Vorlage "Virtueller Ausgang" fuer WLED (HTTP-API, GET).
      Import: Peripherie > Virtuelle Ausgaenge > Rechtsklick > "Vorlage importieren" (falls die Version das nicht
      akzeptiert: Werte aus README.md manuell eintragen). IP-Adresse im Attribut Address anpassen! -->
-<VirtualOut Title="WLED" Comment="WLED Steuerung" Address="http://192.168.1.50" CloseAfterSend="true" CmdInit="" CmdSep="" HintText="">
+<VirtualOut Title="WLED" Comment="WLED Steuerung" Address="http://192.168.2.157" CloseAfterSend="true" CmdInit="" CmdSep="" HintText="">
   <VirtualOutCmd Title="Ein/Aus (Toggle bei Puls)" Comment="Ein=An, Aus=Aus" CmdOnMethod="GET" CmdOn="/win&amp;T=1" CmdOffMethod="GET" CmdOff="/win&amp;T=0" CmdAnaMethod="GET" CmdAna="" Analog="false"/>
   <VirtualOutCmd Title="Toggle" Comment="Umschalten" CmdOnMethod="GET" CmdOn="/win&amp;T=2" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="" Analog="false"/>
   <VirtualOutCmd Title="Helligkeit (0-255)" Comment="Analog 0-255" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;A=&lt;v.0&gt;" Analog="true"/>
