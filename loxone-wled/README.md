@@ -44,26 +44,16 @@ Befehlserkennung für Helligkeit: `<ac>\v</ac>` (0 = aus). Damit lässt sich der
 
 ## Zwei RGB-Streifen (deine WLED-Konfiguration)
 
-Laut LED-Setup hängen beide Streifen am selben WLED, mit „Make a segment for each output“:
+Beide Streifen hängen am selben WLED und werden **als eine durchgehende Lichtlinie** gesteuert (eine IP, ein Virtueller Ausgang, alle Befehle wirken auf alle 280 LEDs):
 
-| Streifen | GPIO | LEDs | WLED-Segment |
-|---|---|---|---|
-| 1 | 16 | 100 (0–99) | 0 |
-| 2 | 2 (reversed) | 180 (100–279) | 1 |
-
-Drei Virtuelle Ausgänge, je mit eigener Vorlage:
-- `WLED_VirtualOutput.xml`: **beide Streifen** gemeinsam
-- `WLED_VirtualOutput_Streifen1.xml`: nur Streifen 1, Befehle beginnen mit `/win&SS=0&SV=1&...`
-- `WLED_VirtualOutput_Streifen2.xml`: nur Streifen 2, Befehle beginnen mit `/win&SS=1&SV=1&...`
-
-Test im Browser (nur Streifen 2 rot): `http://192.168.2.157/win&SS=1&SV=1&R=255&G=0&B=0`
-Wenn dabei trotzdem beide Streifen rot werden, die Segmente in WLED unter *Segments* prüfen (zwei Segmente, je eines „selected“)
-und mir das Ergebnis schicken; dann passe ich die Befehle an.
-Zuverlässigster Weg für getrennte Szenen: Presets in der WLED-App speichern und per `PL=<nr>` aufrufen.
+| Streifen | GPIO | LEDs |
+|---|---|---|
+| 1 | 16 | 100 (0–99) |
+| 2 | 2 (reversed) | 180 (100–279) |
 
 Hinweise zu deinem Setup:
 - 280 LEDs ≈ bis zu ca. 16 A bei Volllast Weiß. In WLED unter *LED Preferences* **Maximum Current** setzen (passend zum Netzteil), solange der Helligkeitslimiter aus ist.
-- Streifen 2 ist „reversed“: Effekte laufen dort gegenläufig, was bei Wischeffekten gewollt sein kann.
+- Streifen 2 ist „reversed“: Effekte laufen über beide Streifen durchgehend.
 - GPIO 2 ist beim ESP32 ein Boot-Pin; funktioniert meist, bei Boot-Problemen auf einen anderen GPIO wechseln.
 
 ## Tipps
