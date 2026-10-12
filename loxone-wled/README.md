@@ -51,6 +51,29 @@ sonst blockiert der Browser die Verbindung zu `http://192.168.2.157`). Die Adres
 | Radio-Taster (1…n) | Ausgang = Preset-Nr. | Preset (`PL=`) |
 | Taster | Impuls | Nachtlicht (`ND&NL=1`) / Stopp (`NL=0`) |
 
+## Lichtsteuerung (Lico) + Touch Pure Flex
+
+Lichtkreis 1 der Lichtsteuerung als **RGB** anlegen (Doppelklick auf den Baustein > Lichtkreise). Die App zeigt dann das Farbrad der Lichtsteuerung,
+ein separater Farbwähler-Baustein ist nicht nötig.
+
+Verdrahtung:
+- `Lc1` (RGB-Wert, Loxone-Format `1BBBGGGRRR`, je Kanal 0–100) > drei **Formel**-Bausteine > Befehle Rot / Grün / Blau:
+  - Rot: `(I1 % 1000) * 2.55`
+  - Grün: `(int(I1 / 1000) % 1000) * 2.55`
+  - Blau: `(int(I1 / 1000000) % 1000) * 2.55`
+- `M` (aktuelle Stimmung; 0 = aus) > Formel `I1 <> 0` > Befehl **Ein/Aus**.
+
+Touch Pure Flex, API-Befehle (Kürzel `Lico` = Kürzel des Bausteins in Loxone Config):
+
+| Taste | API-Befehl |
+|---|---|
+| Ein (alles an) | `SET(Lico;On;pulse)` |
+| Aus | `SET(Lico;Off;pulse)` |
+| Nächste / vorherige Stimmung | `SET(Lico;M+;pulse)` / `SET(Lico;M-;pulse)` |
+| Stimmung wählen (Hoch/Runter) | `MENU(Lico;Mood;)` (Liste füllt sich automatisch) |
+| Master-Helligkeit | `VALUESELECT(Lico;MBr;+;0;100;10;%)` |
+| Lichtkreis 1 schalten | `SET(Lico;Lc1;pulse)` |
+
 ## Wertebereiche umrechnen
 
 Loxone-Lichtsteuerung (RGB) und Dimmer liefern **0–100 %**, WLED erwartet **0–255**.
