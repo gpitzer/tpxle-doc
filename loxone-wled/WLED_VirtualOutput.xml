@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Loxone Config: Vorlage "Virtueller Ausgang" fuer WLED (HTTP-API, GET).
-     Import: Peripherie > Virtuelle Ausgaenge > Rechtsklick > "Vorlage importieren" (falls die Version das nicht
-     akzeptiert: Werte aus README.md manuell eintragen). IP-Adresse im Attribut Address anpassen! -->
-<VirtualOut Title="WLED" Comment="WLED Steuerung" Address="http://192.168.2.157" CloseAfterSend="true" CmdInit="" CmdSep="" HintText="">
-  <VirtualOutCmd Title="Ein/Aus (Toggle bei Puls)" Comment="Ein=An, Aus=Aus" CmdOnMethod="GET" CmdOn="/win&amp;T=1" CmdOffMethod="GET" CmdOff="/win&amp;T=0" CmdAnaMethod="GET" CmdAna="" Analog="false"/>
-  <VirtualOutCmd Title="Toggle" Comment="Umschalten" CmdOnMethod="GET" CmdOn="/win&amp;T=2" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="" Analog="false"/>
-  <VirtualOutCmd Title="Helligkeit (0-255)" Comment="Analog 0-255" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;A=&lt;v.0&gt;" Analog="true"/>
-  <VirtualOutCmd Title="Rot (0-255)" Comment="Analog 0-255" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;R=&lt;v.0&gt;" Analog="true"/>
-  <VirtualOutCmd Title="Gruen (0-255)" Comment="Analog 0-255" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;G=&lt;v.0&gt;" Analog="true"/>
-  <VirtualOutCmd Title="Blau (0-255)" Comment="Analog 0-255" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;B=&lt;v.0&gt;" Analog="true"/>
-  <VirtualOutCmd Title="Weiss (0-255)" Comment="RGBW-Streifen" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;W=&lt;v.0&gt;" Analog="true"/>
-  <VirtualOutCmd Title="Effekt (0-200)" Comment="Effekt-ID" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;FX=&lt;v.0&gt;" Analog="true"/>
-  <VirtualOutCmd Title="Effekt-Geschwindigkeit (0-255)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;SX=&lt;v.0&gt;" Analog="true"/>
-  <VirtualOutCmd Title="Effekt-Intensitaet (0-255)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;IX=&lt;v.0&gt;" Analog="true"/>
-  <VirtualOutCmd Title="Palette (0-70)" Comment="Paletten-ID" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;FP=&lt;v.0&gt;" Analog="true"/>
-  <VirtualOutCmd Title="Preset (1-250)" Comment="Preset laden" CmdOnMethod="GET" CmdOn="" CmdOffMethod="GET" CmdOff="" CmdAnaMethod="GET" CmdAna="/win&amp;PL=&lt;v.0&gt;" Analog="true"/>
-  <VirtualOutCmd Title="Nachtlicht (Minuten, 0=Aus)" Comment="Sanft ausdimmen" CmdOnMethod="GET" CmdOn="/win&amp;ND&amp;NL=1" CmdOffMethod="GET" CmdOff="/win&amp;NL=0" CmdAnaMethod="GET" CmdAna="/win&amp;NT=0&amp;ND&amp;NL=1" Analog="false"/>
+<VirtualOut Title="WLED" Comment="WLED Steuerung" Address="http://192.168.2.157" CmdInit="" CloseAfterSend="true" CmdSep=";">
+	<Info templateType="3" minVersion="10011106"/>
+	<VirtualOutCmd Title="Ein/Aus" Comment="" CmdOnMethod="GET" CmdOn="/win&amp;T=1" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="/win&amp;T=0" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="" CmdAnaHTTP="" CmdAnaPost="" Analog="false" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Toggle" Comment="" CmdOnMethod="GET" CmdOn="/win&amp;T=2" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="" CmdAnaHTTP="" CmdAnaPost="" Analog="false" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Helligkeit (0-255)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="/win&amp;A=&lt;v.0&gt;" CmdAnaHTTP="" CmdAnaPost="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Rot (0-255)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="/win&amp;R=&lt;v.0&gt;" CmdAnaHTTP="" CmdAnaPost="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Gruen (0-255)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="/win&amp;G=&lt;v.0&gt;" CmdAnaHTTP="" CmdAnaPost="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Blau (0-255)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="/win&amp;B=&lt;v.0&gt;" CmdAnaHTTP="" CmdAnaPost="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Weiss (0-255)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="/win&amp;W=&lt;v.0&gt;" CmdAnaHTTP="" CmdAnaPost="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Effekt (0-200)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="/win&amp;FX=&lt;v.0&gt;" CmdAnaHTTP="" CmdAnaPost="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Geschwindigkeit (0-255)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="/win&amp;SX=&lt;v.0&gt;" CmdAnaHTTP="" CmdAnaPost="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Intensitaet (0-255)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="/win&amp;IX=&lt;v.0&gt;" CmdAnaHTTP="" CmdAnaPost="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Palette (0-70)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="/win&amp;FP=&lt;v.0&gt;" CmdAnaHTTP="" CmdAnaPost="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Preset (1-250)" Comment="" CmdOnMethod="GET" CmdOn="" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="/win&amp;PL=&lt;v.0&gt;" CmdAnaHTTP="" CmdAnaPost="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="Nachtlicht Ein/Aus" Comment="" CmdOnMethod="GET" CmdOn="/win&amp;ND&amp;NL=1" CmdOnHTTP="" CmdOnPost="" CmdOffMethod="GET" CmdOff="/win&amp;NL=0" CmdOffHTTP="" CmdOffPost="" CmdAnaMethod="GET" CmdAna="" CmdAnaHTTP="" CmdAnaPost="" Analog="false" Repeat="0" RepeatRate="0"/>
 </VirtualOut>
