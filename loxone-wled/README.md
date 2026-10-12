@@ -31,6 +31,26 @@ Funktioniert ohne Zusatzsoftware direkt in Loxone Config.
 Mehrere Parameter lassen sich kombinieren, z. B. Warmweiß 50 %:
 `/win&T=1&A=128&R=255&G=147&B=41`
 
+## Steuerseite für den Browser (`wled-steuerung.html`)
+
+Eigenständige Seite mit allen Funktionen: Ein/Aus, Helligkeit, Farbe, Effekte (Namen direkt aus WLED), Geschwindigkeit, Intensität,
+Paletten, Presets und Nachtlicht. Datei herunterladen und per Doppelklick im Browser öffnen (Handy/PC im selben WLAN, **nicht** über https hosten,
+sonst blockiert der Browser die Verbindung zu `http://192.168.2.157`). Die Adresse wird im Browser gemerkt.
+
+## Verdrahtung in Loxone (alle Funktionen)
+
+| Baustein | Ausgang | → Befehl am Virtuellen Ausgang |
+|---|---|---|
+| Schalter | Ein / Aus | Ein/Aus (`T=1` / `T=0`) |
+| Taster | Impuls | Toggle (`T=2`) |
+| Dimmer/Schieberegler → Formel `I1*2.55` | AQ | Helligkeit (`A=`) |
+| Farbwähler V2 → je Kanal Formel `I1*2.55` | R, G, B | Rot, Grün, Blau (`R=`, `G=`, `B=`) |
+| Analogwert-Slider (0–200) | AQ | Effekt (`FX=`) |
+| Analogwert-Slider (0–255) | AQ | Geschwindigkeit (`SX=`) / Intensität (`IX=`) |
+| Analogwert-Slider (0–70) | AQ | Palette (`FP=`) |
+| Radio-Taster (1…n) | Ausgang = Preset-Nr. | Preset (`PL=`) |
+| Taster | Impuls | Nachtlicht (`ND&NL=1`) / Stopp (`NL=0`) |
+
 ## Wertebereiche umrechnen
 
 Loxone-Lichtsteuerung (RGB) und Dimmer liefern **0–100 %**, WLED erwartet **0–255**.

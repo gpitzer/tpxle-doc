@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WLED Steuerung</title>
+<style>
+  :root { --bg:#111; --card:#1d1d1f; --fg:#eee; --mute:#9a9aa0; --acc:#4da3ff; --ok:#3ecf8e; --err:#ff6b6b; }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#f3f3f6; --card:#fff; --fg:#1b1b1f; --mute:#63636b; --acc:#0a6cd6; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.4 system-ui,sans-serif; }
+  main { max-width:560px; margin:0 auto; padding:16px; display:grid; gap:12px; }
+  h1 { font-size:1.25rem; margin:4px 0; }
+  .card { background:var(--card); border-radius:14px; padding:14px 16px; display:grid; gap:10px; }
+  .row { display:flex; align-items:center; gap:10px; justify-content:space-between; }
+  label { color:var(--mute); font-size:.85rem; }
+  input[type=text], select { width:100%; padding:10px; border-radius:8px; border:1px solid #555; background:transparent; color:var(--fg); font:inherit; }
+  input[type=range] { width:100%; accent-color:var(--acc); }
+  input[type=color] { width:64px; height:44px; border:none; background:none; padding:0; }
+  button { padding:10px 14px; border-radius:10px; border:0; background:var(--acc); color:#fff; font:inherit; cursor:pointer; }
+  button.alt { background:transparent; color:var(--fg); border:1px solid #666; }
+  button.big { font-size:1.1rem; padding:14px; width:100%; }
+  button.on { background:var(--ok); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:8px; }
+  #status { font-size:.85rem; color:var(--mute); }
+  #status.err { color:var(--err); }
+  .val { min-width:3ch; text-align:right; color:var(--mute); }
+</style>
+</head>
+<body>
+<main>
+  <h1>WLED Steuerung</h1>
+
+  <div class="card">
+    <label for="ip">WLED-Adresse</label>
+    <div class="row">
+      <input id="ip" type="text" value="192.168.2.157" inputmode="url">
+      <button id="connect">Verbinden</button>
+    </div>
+    <div id="status">Nicht verbunden</div>
+  </div>
+
+  <div class="card">
+    <button id="power" class="big alt">Ein / Aus</button>
+    <div>
+      <div class="row"><label for="bri">Helligkeit</label><span class="val" id="briV"></span></div>
+      <input id="bri" type="range" min="1" max="255">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row"><label for="color">Farbe</label><input id="color" type="color" value="#ffffff"></div>
+    <div class="grid" id="swatches"></div>
+  </div>
+
+  <div class="card">
+    <div><label for="fx">Effekt</label><select id="fx"></select></div>
+    <div>
+      <div class="row"><label for="sx">Geschwindigkeit</label><span class="val" id="sxV"></span></div>
+      <input id="sx" type="range" min="0" max="255">
+    </div>
+    <div>
+      <div class="row"><label for="ix">Intensität</label><span class="val" id="ixV"></span></div>
+      <input id="ix" type="range" min="0" max="255">
+    </div>
+    <div><label for="pal">Palette</label><select id="pal"></select></div>
+  </div>
+
+  <div class="card">
+    <label>Presets</label>
+    <div class="grid" id="presets"><span id="noPresets" class="val">Keine Presets gespeichert</span></div>
+  </div>
+
+  <div class="card">
+    <label>Nachtlicht (sanft ausdimmen)</label>
+    <div class="row">
+      <select id="nlDur">
+        <option value="5">5 Min</option><option value="15">15 Min</option>
+        <option value="30" selected>30 Min</option><option value="60">60 Min</option>
+      </select>
+      <button id="nlStart">Starten</button>
+      <button id="nlStop" class="alt">Stopp</button>
+    </div>
+  </div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const SWATCHES = { 'Warmweiß':[255,147,41], 'Kaltweiß':[201,226,255], 'Rot':[255,0,0], 'Grün':[0,255,0],
+                   'Blau':[0,0,255], 'Orange':[255,100,0], 'Pink':[255,0,128], 'Violett':[128,0,255] };
+let base = '', busy = false, segIds = [0];
+
+const hex2rgb = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16));
+const rgb2hex = c => '#' + c.map(v => v.toString(16).padStart(2,'0')).join('');
+
+function setStatus(msg, err) { const s = $('status'); s.textContent = msg; s.className = err ? 'err' : ''; }
+
+async function api(path, body) {
+  const opt = body === undefined ? {} : { method:'POST', body: JSON.stringify(body) };
+  const r = await fetch(base + path, opt);
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+
+// Segment-Werte (fx, sx, ix, pal, col) auf alle Segmente anwenden, damit beide Streifen gleich laufen
+const seg = props => ({ seg: segIds.map(id => ({ id, ...props })) });
+const send = obj => api('/json/state', { ...obj, v:true }).then(render).catch(e => setStatus('Fehler: ' + e.message, true));
+
+function fillSelect(sel, names, skip) {
+  const items = names.map((n, i) => [i, n]).filter(([, n]) => !skip || n !== 'RSVD' && n !== '-');
+  items.sort((a, b) => a[1].localeCompare(b[1], 'de'));
+  sel.innerHTML = items.map(([i, n]) => `<option value="${i}">${n}</option>`).join('');
+}
+
+function render(st) {
+  if (!st || !st.state) return;
+  const s = st.state, g = s.seg && s.seg[0];
+  segIds = (s.seg || [{ id:0 }]).map(x => x.id);
+  const p = $('power'); p.textContent = s.on ? 'Ein' : 'Aus'; p.classList.toggle('on', !!s.on);
+  if (!busy) {
+    $('bri').value = s.bri; $('briV').textContent = s.bri;
+    if (g) {
+      $('fx').value = g.fx; $('pal').value = g.pal;
+      $('sx').value = g.sx; $('sxV').textContent = g.sx;
+      $('ix').value = g.ix; $('ixV').textContent = g.ix;
+      if (g.col && g.col[0]) $('color').value = rgb2hex(g.col[0].slice(0, 3));
+    }
+  }
+  setStatus('Verbunden mit ' + (st.info ? st.info.name : base) + (st.info ? ' (' + st.info.leds.count + ' LEDs)' : ''));
+}
+
+async function connect() {
+  base = 'http://' + $('ip').value.trim().replace(/^https?:\/\//, '').replace(/\/$/, '');
+  try { localStorage.setItem('wledIp', $('ip').value.trim()); } catch (e) {}
+  setStatus('Verbinde …');
+  try {
+    const [fxs, pals, st] = await Promise.all([api('/json/effects'), api('/json/palettes'), api('/json')]);
+    fillSelect($('fx'), fxs, true); fillSelect($('pal'), pals);
+    render(st);
+    loadPresets();
+  } catch (e) {
+    setStatus('Keine Verbindung (' + e.message + '). Läuft die Seite im selben Netz und über http/Datei, nicht https?', true);
+  }
+}
+
+async function loadPresets() {
+  try {
+    const p = await (await fetch(base + '/presets.json')).json();
+    const box = $('presets'); box.innerHTML = '';
+    const ids = Object.keys(p).filter(k => k !== '0' && p[k] && p[k].n);
+    if (!ids.length) { box.innerHTML = '<span class="val">Keine Presets gespeichert</span>'; return; }
+    ids.forEach(id => {
+      const b = document.createElement('button'); b.className = 'alt'; b.textContent = p[id].n;
+      b.onclick = () => send({ ps: +id }); box.appendChild(b);
+    });
+  } catch (e) { /* Presets optional */ }
+}
+
+// Regler: Anzeige sofort, Befehl erst bei Loslassen/Pause (WLED verträgt nur wenige Befehle pro Sekunde)
+function slider(id, fn) {
+  const el = $(id); let t;
+  el.oninput = () => { busy = true; $(id + 'V').textContent = el.value; clearTimeout(t); t = setTimeout(() => { fn(+el.value); busy = false; }, 200); };
+}
+
+$('connect').onclick = connect;
+$('power').onclick = () => send({ on:'t' });
+slider('bri', v => send({ bri:v, on:true }));
+slider('sx', v => send(seg({ sx:v })));
+slider('ix', v => send(seg({ ix:v })));
+$('fx').onchange = e => send(seg({ fx:+e.target.value }));
+$('pal').onchange = e => send(seg({ pal:+e.target.value }));
+$('color').onchange = e => send({ on:true, ...seg({ col:[hex2rgb(e.target.value)] }) });
+$('nlStart').onclick = () => send({ nl:{ on:true, dur:+$('nlDur').value, mode:1, tbri:0 } });
+$('nlStop').onclick = () => send({ nl:{ on:false } });
+
+Object.entries(SWATCHES).forEach(([n, c]) => {
+  const b = document.createElement('button'); b.className = 'alt'; b.textContent = n;
+  b.style.borderColor = rgb2hex(c); b.onclick = () => send({ on:true, ...seg({ fx:0, col:[c] }) });
+  $('swatches').appendChild(b);
+});
+
+try { const ip = localStorage.getItem('wledIp'); if (ip) $('ip').value = ip; } catch (e) {}
+connect();
+setInterval(() => { if (base && !busy) api('/json').then(render).catch(() => {}); }, 4000);
+</script>
+</body>
+</html>
