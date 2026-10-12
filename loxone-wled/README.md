@@ -51,7 +51,29 @@ sonst blockiert der Browser die Verbindung zu `http://192.168.2.157`). Die Adres
 | Radio-Taster (1…n) | Ausgang = Preset-Nr. | Preset (`PL=`) |
 | Taster | Impuls | Nachtlicht (`ND&NL=1`) / Stopp (`NL=0`) |
 
-## Lichtsteuerung (Lico) + Touch Pure Flex
+## Variante A (einfach): RGB-Lichtszene (RGBLC)
+
+Der Baustein **RGB-Lichtszene (RGBLC)** gibt Rot, Grün und Blau schon getrennt aus (0–100 %). Szenen definierst du per Doppelklick auf den Baustein
+(z. B. Warmweiß, Party, Blau). In der App schaltest du die Szenen durch.
+
+Verdrahtung:
+
+| Von | Über | Nach (Befehl am Virtuellen Ausgang) |
+|---|---|---|
+| `AQr` | Formel `I1 * 2.55` | Rot (`R=<v.0>`) |
+| `AQg` | Formel `I1 * 2.55` | Grün (`G=<v.0>`) |
+| `AQb` | Formel `I1 * 2.55` | Blau (`B=<v.0>`) |
+| Schalter (Ein/Aus) | – | Ein/Aus (`T=1` / `T=0`) |
+| Analogwert-Slider 0–200 | – | Effekt (`FX=<v.0>`) |
+| Analogwert-Slider 0–255 | – | Geschwindigkeit (`SX=`) / Intensität (`IX=`) |
+| Radio-Taster | – | Preset (`PL=<v.0>`) |
+
+Hinweise:
+- Der RGBLC hat keinen Ein/Aus-Ausgang: Ein/Aus läuft über den separaten Schalter. Der Eingang `O` des Bausteins setzt alles auf Weiß.
+- Helligkeit steckt in den Szenen; dunklere Varianten als eigene Szenen anlegen.
+- Mit `AQs` (aktive Szene) lässt sich zusätzlich ein WLED-Preset aufrufen: `AQs` > Formel > Befehl Preset (`PL=`). Dabei Szenen-Nummer 0 herausfiltern, weil `PL=0` kein gültiges Preset ist.
+
+## Variante B (optional): Lichtsteuerung (Lico) + Touch Pure Flex
 
 Lichtkreis 1 der Lichtsteuerung als **RGB** anlegen (Doppelklick auf den Baustein > Lichtkreise). Die App zeigt dann das Farbrad der Lichtsteuerung,
 ein separater Farbwähler-Baustein ist nicht nötig.
@@ -63,7 +85,7 @@ Verdrahtung:
   - Blau: `(int(I1 / 1000000) % 1000) * 2.55`
 - `M` (aktuelle Stimmung; 0 = aus) > Formel `I1 <> 0` > Befehl **Ein/Aus**.
 
-Touch Pure Flex, API-Befehle (Kürzel `Lico` = Kürzel des Bausteins in Loxone Config):
+Nur nötig, wenn ein Touch Pure Flex vorhanden ist. Touch Pure Flex, API-Befehle (Kürzel `Lico` = Kürzel des Bausteins in Loxone Config):
 
 | Taste | API-Befehl |
 |---|---|
