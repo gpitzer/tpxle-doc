@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 760" font-family="Segoe UI, Arial, sans-serif">
+<defs><marker id="ar" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#555"/></marker></defs>
+<rect width="1240" height="760" fill="#fff"/>
+<text x="620" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#222">Loxone → WLED (nur App-Bedienung)</text>
+<rect x="30" y="60" width="190" height="56" rx="8" fill="#e8f1ff" stroke="#2f6fd6" stroke-width="1.5"/>
+<text x="125" y="84" text-anchor="middle" font-size="16" font-weight="700" fill="#222">Loxone App</text>
+<text x="125" y="104" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Farbrad / Stimmung</text>
+<path d="M125,116 L125,160" stroke="#555" stroke-width="1.8" marker-end="url(#ar)" fill="none"/>
+<rect x="30" y="160" width="190" height="230" rx="8" fill="#e9f7ec" stroke="#2e9a4d" stroke-width="1.5"/>
+<text x="125" y="188" text-anchor="middle" font-size="16" font-weight="700" fill="#222">Lichtsteuerung</text>
+<text x="125" y="208" text-anchor="middle" font-size="13" font-weight="400" fill="#222">„Außenbereich“</text>
+<text x="125" y="232" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Lichtkreis 1 = RGB</text>
+<text x="125" y="250" text-anchor="middle" font-size="13" font-weight="400" fill="#222">+ Stimmungen anlegen</text>
+<text x="205" y="305" text-anchor="end" font-size="14" font-weight="700" fill="#222">Lc1</text>
+<text x="205" y="350" text-anchor="end" font-size="14" font-weight="700" fill="#222">M</text>
+<text x="125" y="380" text-anchor="middle" font-size="12" font-weight="400" fill="#888">API-Ausgang: unbenutzt</text>
+<rect x="290" y="128" width="300" height="44" rx="8" fill="#fff6e0" stroke="#d98e00" stroke-width="1.5"/>
+<text x="440" y="155" text-anchor="middle" font-size="14" font-weight="400" fill="#222">Rot: (I1 % 1000) * 2.55</text>
+<rect x="290" y="188" width="300" height="44" rx="8" fill="#fff6e0" stroke="#d98e00" stroke-width="1.5"/>
+<text x="440" y="215" text-anchor="middle" font-size="14" font-weight="400" fill="#222">Grün: (int(I1/1000) % 1000) * 2.55</text>
+<rect x="290" y="248" width="300" height="44" rx="8" fill="#fff6e0" stroke="#d98e00" stroke-width="1.5"/>
+<text x="440" y="275" text-anchor="middle" font-size="14" font-weight="400" fill="#222">Blau: (int(I1/1000000) % 1000) * 2.55</text>
+<rect x="290" y="328" width="300" height="44" rx="8" fill="#fff6e0" stroke="#d98e00" stroke-width="1.5"/>
+<text x="440" y="355" text-anchor="middle" font-size="14" font-weight="400" fill="#222">Ein/Aus: I1 &lt;&gt; 0</text>
+<path d="M222,303 C255.0,303 255.0,150 288,150" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<path d="M592,150 C667.0,150 667.0,150 742,150" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<path d="M222,303 C255.0,303 255.0,210 288,210" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<path d="M592,210 C667.0,210 667.0,210 742,210" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<path d="M222,303 C255.0,303 255.0,270 288,270" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<path d="M592,270 C667.0,270 667.0,270 742,270" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<path d="M222,348 C255.0,348 255.0,350 288,350" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<path d="M592,350 C667.0,350 667.0,350 742,350" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<rect x="290" y="428" width="300" height="44" rx="8" fill="#f1ecff" stroke="#7a55d6" stroke-width="1.5"/>
+<text x="440" y="455" text-anchor="middle" font-size="14" font-weight="400" fill="#222">Slider 0–200</text>
+<path d="M592,450 C667.0,450 667.0,450 742,450" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<rect x="290" y="488" width="300" height="44" rx="8" fill="#f1ecff" stroke="#7a55d6" stroke-width="1.5"/>
+<text x="440" y="515" text-anchor="middle" font-size="14" font-weight="400" fill="#222">Slider 0–255</text>
+<path d="M592,510 C667.0,510 667.0,510 742,510" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<rect x="290" y="548" width="300" height="44" rx="8" fill="#f1ecff" stroke="#7a55d6" stroke-width="1.5"/>
+<text x="440" y="575" text-anchor="middle" font-size="14" font-weight="400" fill="#222">Slider 0–255</text>
+<path d="M592,570 C667.0,570 667.0,570 742,570" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<rect x="290" y="608" width="300" height="44" rx="8" fill="#f1ecff" stroke="#7a55d6" stroke-width="1.5"/>
+<text x="440" y="635" text-anchor="middle" font-size="14" font-weight="400" fill="#222">Slider 0–70</text>
+<path d="M592,630 C667.0,630 667.0,630 742,630" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<rect x="290" y="668" width="300" height="44" rx="8" fill="#f1ecff" stroke="#7a55d6" stroke-width="1.5"/>
+<text x="440" y="695" text-anchor="middle" font-size="14" font-weight="400" fill="#222">Radio-Taster (Preset-Nr.)</text>
+<path d="M592,690 C667.0,690 667.0,690 742,690" fill="none" stroke="#555" stroke-width="1.8" marker-end="url(#ar)"/>
+<text x="440" y="415" text-anchor="middle" font-size="13" font-weight="600" fill="#555">Bedienung in der App (Slider / Taster)</text>
+<text x="440" y="118" text-anchor="middle" font-size="13" font-weight="600" fill="#555">Formel-Bausteine (0–100 % → 0–255)</text>
+<rect x="740" y="62" width="250" height="678" rx="8" fill="#eef2f6" stroke="#4a5b6d" stroke-width="1.5"/>
+<text x="865" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#222">Virtueller Ausgang</text>
+<text x="865" y="110" text-anchor="middle" font-size="13" font-weight="400" fill="#222">http://192.168.2.157</text>
+<rect x="758" y="132" width="214" height="36" rx="6" fill="#fff" stroke="#4a5b6d" stroke-width="1.5"/>
+<rect x="758" y="192" width="214" height="36" rx="6" fill="#fff" stroke="#4a5b6d" stroke-width="1.5"/>
+<rect x="758" y="252" width="214" height="36" rx="6" fill="#fff" stroke="#4a5b6d" stroke-width="1.5"/>
+<rect x="758" y="332" width="214" height="36" rx="6" fill="#fff" stroke="#4a5b6d" stroke-width="1.5"/>
+<rect x="758" y="432" width="214" height="36" rx="6" fill="#fff" stroke="#4a5b6d" stroke-width="1.5"/>
+<rect x="758" y="492" width="214" height="36" rx="6" fill="#fff" stroke="#4a5b6d" stroke-width="1.5"/>
+<rect x="758" y="552" width="214" height="36" rx="6" fill="#fff" stroke="#4a5b6d" stroke-width="1.5"/>
+<rect x="758" y="612" width="214" height="36" rx="6" fill="#fff" stroke="#4a5b6d" stroke-width="1.5"/>
+<rect x="758" y="672" width="214" height="36" rx="6" fill="#fff" stroke="#4a5b6d" stroke-width="1.5"/>
+<text x="865" y="155" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Befehl Rot  R=&lt;v.0&gt;</text>
+<text x="865" y="215" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Befehl Grün  G=&lt;v.0&gt;</text>
+<text x="865" y="275" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Befehl Blau  B=&lt;v.0&gt;</text>
+<text x="865" y="355" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Ein/Aus  T=1 / T=0</text>
+<text x="865" y="455" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Effekt  FX=&lt;v.0&gt;</text>
+<text x="865" y="515" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Tempo  SX=&lt;v.0&gt;</text>
+<text x="865" y="575" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Intensität  IX=&lt;v.0&gt;</text>
+<text x="865" y="635" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Palette  FP=&lt;v.0&gt;</text>
+<text x="865" y="695" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Preset  PL=&lt;v.0&gt;</text>
+<rect x="1040" y="330" width="170" height="150" rx="8" fill="#fdeeee" stroke="#c43d3d" stroke-width="1.5"/>
+<text x="1125" y="360" text-anchor="middle" font-size="18" font-weight="700" fill="#222">WLED</text>
+<text x="1125" y="382" text-anchor="middle" font-size="13" font-weight="400" fill="#222">192.168.2.157</text>
+<text x="1125" y="408" text-anchor="middle" font-size="13" font-weight="400" fill="#222">280 LEDs</text>
+<text x="1125" y="428" text-anchor="middle" font-size="13" font-weight="400" fill="#222">Streifen 1 + 2</text>
+<text x="1125" y="448" text-anchor="middle" font-size="13" font-weight="400" fill="#222">als eine Lichtlinie</text>
+<path d="M992,425 L1038,405" stroke="#555" stroke-width="2" marker-end="url(#ar)" fill="none"/>
+<path d="M992,350 L1038,380" stroke="#555" stroke-width="2" marker-end="url(#ar)" fill="none"/>
+<text x="1125" y="520" text-anchor="middle" font-size="13" font-weight="600" fill="#555">HTTP-Anfragen</text>
+<text x="1125" y="538" text-anchor="middle" font-size="12" font-weight="400" fill="#555">/win&amp;R=…&amp;G=…&amp;B=…</text>
+</svg>
