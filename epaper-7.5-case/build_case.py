@@ -13,8 +13,12 @@ from shapely.geometry import box as sbox, Point
 
 # ---------------- Parameter (mm) ----------------
 PANEL_W, PANEL_H, PANEL_T = 170.2, 111.2, 1.18   # 7.5" Rohpanel (Waveshare)
-SLOT_CLR_X = 1.0                                 # Spiel in der Breite
-SLOT_T = 2.2                                     # Schlitzdicke (Panel 1.18 + Spiel)
+PL_BACK, PL_POCKET, PL_SIDE = 2.0, 1.3, 1.2      # Rueckplatte: Rueckwand, Taschentiefe, Seitenwand
+PL_LIP, PL_LIP_T, PL_UP = 1.8, 1.0, 1.2          # Haltelippe oben: Ueberdeckung, Dicke, Ueberstand
+PL_BOTTOM_GAP = 2.5                              # Rueckplatte endet so weit ueber Panel-Unterkante (FPC)
+PLATE_W = PANEL_W + 0.4 + 2 * PL_SIDE            # Breite Rueckplatte
+SLOT_CLR_X = 0.8                                 # Spiel Rueckplatte im Schlitz
+SLOT_T = PL_BACK + PL_POCKET + 0.6               # Schlitzdicke (Rueckplatte + Panel + Spiel)
 SLOT_DEPTH = 8.0                                 # Einstecktiefe entlang der Panelachse
 TILT = 15.0                                      # Neigung nach hinten (Grad)
 
@@ -94,7 +98,7 @@ def build_body():
     body = union(shell, guide, *posts)
 
     # Schlitz fuer das Panel
-    slot = tilted_slab(PANEL_W + SLOT_CLR_X, SLOT_T, -SLOT_DEPTH, 60)
+    slot = tilted_slab(PLATE_W + SLOT_CLR_X, SLOT_T, -SLOT_DEPTH, 60)
     # Durchfuehrung FPC/FFC in den Innenraum
     yc = SLOT_Y_TOP - (SLOT_DEPTH) * np.tan(np.radians(TILT))
     window = cbox(-WINDOW_X / 2, WINDOW_X / 2, yc - (SLOT_T + 4) / 2, yc + (SLOT_T + 4) / 2,
@@ -133,12 +137,46 @@ def build_cover():
     return diff(cover, *holes, *heads)
 
 
+def plate_local():
+    """Rueckplatte in Schlitzkoordinaten (x, y', z'); y' < 0 = Vorderseite, z' = 0 an Oberkante Sockel."""
+    yb = SLOT_T / 2 - 0.15                       # Rueckseite der Platte
+    y_pocket = yb - PL_BACK                      # Taschenboden
+    z_bot = -SLOT_DEPTH + PL_BOTTOM_GAP
+    z_top = PANEL_H - SLOT_DEPTH + PL_UP
+    w = PLATE_W / 2
+    back = cbox(-w, w, y_pocket, yb, z_bot, z_top)
+    side = [cbox(w - PL_SIDE, w, y_pocket - PL_POCKET, y_pocket, z_bot, z_top),
+            cbox(-w, -w + PL_SIDE, y_pocket - PL_POCKET, y_pocket, z_bot, z_top)]
+    y_front = y_pocket - PL_POCKET - PL_LIP_T
+    # Lippe vor dem Panel (mit 0.1 mm Luft) und Abschlusskappe ueber der Panel-Oberkante
+    lip = union(cbox(-w, w, y_front, y_pocket - PANEL_T - 0.1, z_top - PL_UP - PL_LIP, z_top),
+                cbox(-w, w, y_front, y_pocket, z_top - PL_UP + 0.1, z_top))
+    return union(back, *side, lip), y_pocket
+
+
+def build_plate():
+    """Rueckplatte, Rueckseite auf dem Druckbett."""
+    p, _ = plate_local()
+    yb = SLOT_T / 2 - 0.15
+    m = np.array([[1, 0, 0, 0], [0, 0, 1, 0], [0, -1, 0, yb], [0, 0, 0, 1]], float)
+    p.apply_transform(m)
+    p.apply_translation([0, -p.bounds[0][1], -p.bounds[0][2]])
+    return p
+
+
 def build_dummy():
-    """Platzhalter fuer Panel + Board, nur zur Kollisionspruefung (nicht drucken)."""
-    p = tilted_slab(PANEL_W, PANEL_T, -SLOT_DEPTH, PANEL_H - SLOT_DEPTH)
+    """Platzhalter fuer Panel + Rueckplatte + Board (Kollisionspruefung / Viewer)."""
+    pl, y_pocket = plate_local()
+    z0 = -SLOT_DEPTH
+    panel = cbox(-PANEL_W / 2, PANEL_W / 2, y_pocket - PANEL_T, y_pocket, z0, z0 + PANEL_H)
+    panel.apply_transform(trimesh.transformations.rotation_matrix(np.radians(-TILT), [1, 0, 0]))
+    panel.apply_translation([0, SLOT_Y_TOP, H])
+    plate = pl.copy()
+    plate.apply_transform(trimesh.transformations.rotation_matrix(np.radians(-TILT), [1, 0, 0]))
+    plate.apply_translation([0, SLOT_Y_TOP, H])
     bx, by = board_center()
     b = cbox(bx - BOARD_X / 2, bx + BOARD_X / 2, by - BOARD_Y / 2, by + BOARD_Y / 2, PAD_H, PAD_H + 1.6)
-    return p, b
+    return panel, b, plate
 
 
 if __name__ == "__main__":
@@ -150,11 +188,17 @@ if __name__ == "__main__":
     cover.apply_translation([0, 0, COVER_T])          # flach auf Druckbett
     cover.export(f"{out}/Case_7.5_BottomCover.stl")
     cover.apply_translation([0, 0, -COVER_T])
-    p, b = build_dummy()
+    p, b, pl = build_dummy()
+    cv = lambda a, b_: (lambda x: x.volume if len(x.faces) else 0.0)(inter(a, b_))
+    print("Platte/Body Kollision (mm3):", cv(pl, body), " Panel/Platte:", cv(p, pl))
     print("Panel/Body Kollision (Volumen mm3):", inter(p, body).volume if len(inter(p, body).faces) else 0.0)
     print("Board/Body Kollision (Volumen mm3):", inter(b, body).volume if len(inter(b, body).faces) else 0.0)
     print("Board/Cover Kollision (Volumen mm3):", inter(b, cover).volume if len(inter(b, cover).faces) else 0.0)
     # kombinierte 3MF (Platte mit beiden Teilen nebeneinander)
+    plate = build_plate()
+    print("plate watertight:", plate.is_watertight, plate.bounds.round(1).tolist())
+    plate.export(f"{out}/Case_7.5_BackPlate.stl")
     c2 = cover.copy(); c2.apply_translation([0, W + 10, COVER_T])
-    sc = trimesh.Scene({"Body": body, "BottomCover": c2})
+    p2 = plate.copy(); p2.apply_translation([0, -W - 10, 0])
+    sc = trimesh.Scene({"Body": body, "BottomCover": c2, "BackPlate": p2})
     sc.export(f"{out}/Case_7.5_Plate.3mf")
